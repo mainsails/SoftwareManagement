@@ -61,7 +61,7 @@ PrivateData = @{
         Tags = @('Software','Applications','Deployment','Configuration')
 
         # A URL to the main website for this project.
-        ProjectUri = 'https://github.com/mainsails/ps/SoftwareManagement'
+        ProjectUri = 'https://github.com/mainsails/SoftwareManagement'
 
     } # End of PSData hashtable
 
