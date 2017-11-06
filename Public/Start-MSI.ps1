@@ -17,6 +17,8 @@ Function Start-MSI {
         Adds to the default parameters. Install default is: "REBOOT=ReallySuppress /QN". Uninstall default is: "REBOOT=ReallySuppress /QN"
     .PARAMETER PassThru
         Returns ExitCode, STDOut, and STDErr output from the process
+    .PARAMETER SkipRefresh
+        Skips the post-install refresh of the Windows Explorer Shell
     .PARAMETER ContinueOnError
         Continue if an exit code is returned by msiexec that is not recognized. Default is: $false
     .EXAMPLE
@@ -53,6 +55,9 @@ Function Start-MSI {
         [Parameter(Mandatory=$false)]
         [ValidateNotNullorEmpty()]
         [switch]$PassThru = $false,
+        [Parameter(Mandatory=$false)]
+        [ValidateNotNullorEmpty()]
+        [switch]$SkipRefresh = $false,
         [Parameter(Mandatory=$false)]
         [ValidateNotNullorEmpty()]
         [boolean]$ContinueOnError = $false
@@ -212,7 +217,7 @@ Function Start-MSI {
                 Start-EXE @ExecuteProcessSplat
             }
             # Refresh the Windows Explorer Shell
-            Update-Desktop
+            If (-not $SkipRefresh) { Update-Desktop }
         }
         Else {
             Write-Warning -Message "The MSI is not installed on this system. Skipping action [$Action]"
