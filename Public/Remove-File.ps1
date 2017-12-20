@@ -88,6 +88,10 @@ Function Remove-File {
                     If (($Recurse) -and (Test-Path -LiteralPath $Item -PathType 'Container')) {
                         Write-Verbose -Message "Delete file(s) recursively from path [$Item]"
                     }
+                    ElseIf ((-not $Recurse) -and (Test-Path -LiteralPath $Item -PathType 'Container')) {
+                        Write-Verbose -Message "Skipping folder [$Item] because the Recurse switch was not specified"
+                        Continue
+                    }
                     Else {
                         Write-Verbose -Message "Delete file from path [$Item]"
                     }
