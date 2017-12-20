@@ -7,7 +7,8 @@ Function Get-PendingReboot {
         a) Component Based Servicing
         b) Windows Update / Auto Update
         c) SCCM 2012 Clients (DetermineIfRebootPending WMI method)
-        d) Pending File Rename Operations
+        d) App-V Pending Tasks
+        e) Pending File Rename Operations
     .EXAMPLE
         Get-PendingReboot
 
@@ -127,6 +128,21 @@ Function Get-PendingReboot {
             [string[]]$PendRebootErrorMsg += "Failed to get IsSCCMClientRebootPending: $($_.Exception.Message)"
             Write-Warning -Message 'Failed to get IsSCCMClientRebootPending'
         }
+        
+        ## Determine if there is a pending reboot from an App-V global Pending Task. (User profile based tasks will complete on logoff/logon)
+        Try {
+            If (Test-Path -LiteralPath 'HKLM:SOFTWARE\Software\Microsoft\AppV\Client\PendingTasks' -ErrorAction 'Stop') {
+                [nullable[boolean]]$IsAppVRebootPending = $true
+            }
+            Else {
+                [nullable[boolean]]$IsAppVRebootPending = $false
+            }
+        }
+        Catch {
+            [nullable[boolean]]$IsAppVRebootPending = $null
+            [string[]]$PendRebootErrorMsg += "Failed to get IsAppVRebootPending: $($_.Exception.Message)"
+            Write-Warning -Message 'Failed to get IsAppVRebootPending'
+}
 
         ## Determine if there is a pending reboot for the system
         [boolean]$IsSystemRebootPending = $false
@@ -142,13 +158,14 @@ Function Get-PendingReboot {
             IsCBServicingRebootPending   = $IsCBServicingRebootPending
             IsWindowsUpdateRebootPending = $IsWindowsUpdateRebootPending
             IsSCCMClientRebootPending    = $IsSCCMClientRebootPending
+            IsAppVRebootPending          = $IsAppVRebootPending
             IsFileRenameRebootPending    = $IsFileRenameRebootPending
             PendingFileRenameOperations  = $PendingFileRenameOperations
             ErrorMsg                     = $PendRebootErrorMsg
         }
     }
     End {
-        Write-Output -InputObject ($PendingRebootInfo | Select-Object -Property 'ComputerName','LastBootUpTime','IsSystemRebootPending','IsCBServicingRebootPending','IsWindowsUpdateRebootPending','IsSCCMClientRebootPending','IsFileRenameRebootPending','PendingFileRenameOperations','ErrorMsg')
+        Write-Output -InputObject ($PendingRebootInfo | Select-Object -Property 'ComputerName','LastBootUpTime','IsSystemRebootPending','IsCBServicingRebootPending','IsWindowsUpdateRebootPending','IsSCCMClientRebootPending','IsAppVRebootPending','IsFileRenameRebootPending','PendingFileRenameOperations','ErrorMsg')
 
         # Verbose Logging
         Write-Verbose -Message "##### Ending : [$CmdletName]"
