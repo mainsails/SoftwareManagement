@@ -44,9 +44,14 @@ Function Unblock-AppExecution {
 
         # Remove the scheduled task if it exists
         [string]$schTaskBlockedAppsName = "SoftwarePSM-BlockedApps"
-        If (& $GetSchTaskFunc | Select-Object -Property 'TaskName' | Where-Object { $_.TaskName -eq "$schTaskBlockedAppsName" }) {
-            Write-Verbose -Message "Delete Scheduled Task [$schTaskBlockedAppsName]"
-            Start-Process -FilePath $exeSchTasks -ArgumentList "/Delete /TN $schTaskBlockedAppsName /F" -NoNewWindow -Wait
+        Try {
+            If (& $GetSchTaskFunc | Select-Object -Property 'TaskName' | Where-Object { $_.TaskName -eq "$schTaskBlockedAppsName" }) {
+                Write-Verbose -Message "Delete Scheduled Task [$schTaskBlockedAppsName]"
+                Start-Process -FilePath $exeSchTasks -ArgumentList "/Delete /TN $schTaskBlockedAppsName /F" -NoNewWindow -Wait
+            }
+        }
+        Catch {
+            Write-Warning -Message 'Error retrieving/deleting Scheduled Task'
         }
     }
     End {
