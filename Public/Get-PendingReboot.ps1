@@ -128,7 +128,7 @@ Function Get-PendingReboot {
             [string[]]$PendRebootErrorMsg += "Failed to get IsSCCMClientRebootPending: $($_.Exception.Message)"
             Write-Warning -Message 'Failed to get IsSCCMClientRebootPending'
         }
-        
+
         ## Determine if there is a pending reboot from an App-V global Pending Task. (User profile based tasks will complete on logoff/logon)
         Try {
             If (Test-Path -LiteralPath 'HKLM:SOFTWARE\Software\Microsoft\AppV\Client\PendingTasks' -ErrorAction 'Stop') {
@@ -142,7 +142,7 @@ Function Get-PendingReboot {
             [nullable[boolean]]$IsAppVRebootPending = $null
             [string[]]$PendRebootErrorMsg += "Failed to get IsAppVRebootPending: $($_.Exception.Message)"
             Write-Warning -Message 'Failed to get IsAppVRebootPending'
-}
+        }
 
         ## Determine if there is a pending reboot for the system
         [boolean]$IsSystemRebootPending = $false
