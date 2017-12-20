@@ -89,7 +89,7 @@ Function New-Shortcut {
 
             Write-Verbose -Message "Create shortcut [$($Path.FullName)]"
             # Create URL shortcut
-            If (($Path.FullName).EndsWith('.url')) {
+            If (($Path.FullName).ToLower().EndsWith('.url')) {
                 [string[]]$URLFile = '[InternetShortcut]'
                 $URLFile += "URL=$TargetPath"
                 If ($IconIndex)    { $URLFile += "IconIndex=$IconIndex" }
@@ -97,7 +97,7 @@ Function New-Shortcut {
                 $URLFile | Out-File -FilePath $Path.FullName -Force -Encoding 'default' -ErrorAction 'Stop'
             }
             # Create LNK shortcut
-            ElseIf (($Path.FullName).EndsWith('.lnk')) {
+            ElseIf (($Path.FullName).ToLower().EndsWith('.lnk')) {
                 If (($IconLocation -and $IconIndex) -and (-not ($IconLocation.Contains(',')))) {
                     $IconLocation = $IconLocation + ",$IconIndex"
                 }
