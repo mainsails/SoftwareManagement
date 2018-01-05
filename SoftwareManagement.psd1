@@ -4,7 +4,7 @@
 RootModule = 'SoftwareManagement.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.1.0'
+ModuleVersion = '0.1.1'
 
 # ID used to uniquely identify this module
 GUID = 'f6ef9d27-d00c-452f-8853-5da0f85f330b'
@@ -32,6 +32,7 @@ FunctionsToExport = @('Block-AppExecution',
                       'Get-MSIErrorCodeMessage',
                       'Get-MsiTableProperty',
                       'Get-PendingReboot',
+                      'Get-PowerPlan',
                       'Get-PowerSupply',
                       'Get-ScheduledTasks',
                       'Get-UserProfiles',
@@ -44,6 +45,7 @@ FunctionsToExport = @('Block-AppExecution',
                       'Remove-MSI',
                       'Remove-RegistryKey',
                       'Set-ActiveSetup',
+                      'Set-PowerPlan',
                       'Set-RegistryKey',
                       'Start-EXE',
                       'Start-EXEAsUser',

@@ -14,6 +14,7 @@ The SoftwareManagement module enables a set of functions to perform common appli
 * Register / Unregister DLL files
 * Refresh desktop icons
 * Test power connectivity
+* Setting power schemes
 
 
 ## Requirements
@@ -43,6 +44,7 @@ Update-Desktop
 Update-GroupPolicy
 Get-PowerSupply
 (Get-PowerSupply).IsLaptop
+Set-PowerPlan -Name 'High performance'
 Remove-MSI -Name 'Java' -Verbose
 Remove-MSI -Name 'Java' -Verbose -ExcludeFromUninstall (,('DisplayName', 'Java(TM) 6 Update 31', 'RegEx'))
 Start-EXEAsUser -UserName 'Domain\UserName' -Path "C:\Path\To\File\7zFM.exe" -verbose -wait
