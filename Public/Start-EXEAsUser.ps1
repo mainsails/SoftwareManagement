@@ -92,7 +92,7 @@ Function Start-EXEAsUser {
         }
 
         ## Build the scheduled task XML name
-        [string]$schTaskName = "SoftwarePSM-ExecuteAsUser"
+        [string]$schTaskName = 'SoftwarePSM-ExecuteAsUser'
 
         $tempDir = $(Get-UserProfiles | Where-Object -Property NTAccount -EQ $UserName | Select-Object -ExpandProperty ProfilePath) + "\AppData\Local\Temp"
         If (-not (Test-Path -LiteralPath $tempDir)) {
@@ -113,7 +113,7 @@ Function Start-EXEAsUser {
             $executeProcessAsUserScript += 'set oWShell = CreateObject("WScript.Shell")'
             $executeProcessAsUserScript += 'intReturn = oWShell.Run(strCommand, 0, true)'
             $executeProcessAsUserScript += 'WScript.Quit intReturn'
-            $executeProcessAsUserScript | Out-File -FilePath "$tempDir\$($schTaskName).vbs" -Force -Encoding 'default' -ErrorAction 'SilentlyContinue'
+            $executeProcessAsUserScript | Out-File -FilePath "$tempDir\$($schTaskName).vbs" -Force -Encoding default -ErrorAction SilentlyContinue
             $Path = 'wscript.exe'
             $Parameters = "`"$tempDir\$($schTaskName).vbs`""
         }
@@ -199,7 +199,7 @@ Function Start-EXEAsUser {
             Write-Verbose -Message 'Delete the scheduled task which did not trigger'
             $schTaskRemoval = Start-EXE -Path $exeSchTasks -Parameters "/delete /tn $schTaskName /f" -ContinueOnError $true
             If (-not $ContinueOnError) {
-                Throw "Failed to trigger scheduled task [$schTaskName]."
+                Throw "Failed to trigger scheduled task [$schTaskName]"
             }
             Else {
                 Return
@@ -210,11 +210,27 @@ Function Start-EXEAsUser {
         If ($Wait) {
             Write-Verbose -Message "Waiting for the process launched by the scheduled task [$schTaskName] to complete execution (this may take some time)"
             Start-Sleep -Seconds 1
-            While ((($exeSchTasksResult = & $exeSchTasks /query /TN $schTaskName /V /FO CSV) | ConvertFrom-CSV | Select-Object -ExpandProperty 'Status' | Select-Object -First 1) -eq 'Running') {
-                Start-Sleep -Seconds 5
+            Try {
+                [__comobject]$ScheduleService = New-Object -ComObject 'Schedule.Service' -ErrorAction Stop
+                $ScheduleService.Connect()
+                $RootFolder = $ScheduleService.GetFolder('\')
+                $Task       = $RootFolder.GetTask("$schTaskName")
+                # Task State(Status) 4 = 'Running'
+                While ($Task.State -eq 4) {
+                    Start-Sleep -Seconds 5
+                }
+                # Get the exit code from the process launched by the scheduled task
+                [int32]$executeProcessAsUserExitCode = $Task.LastTaskResult
             }
-            # Get the exit code from the process launched by the scheduled task
-            [int32]$executeProcessAsUserExitCode = ($exeSchTasksResult = & $exeSchTasks /query /TN $schTaskName /V /FO CSV) | ConvertFrom-CSV | Select-Object -ExpandProperty 'Last Result' | Select-Object -First 1
+            Catch {
+                Write-Verbose -Message 'Failed to retrieve information from Task Scheduler'
+            }
+            Finally {
+                Try {
+                    $null = [Runtime.Interopservices.Marshal]::ReleaseComObject($ScheduleService)
+                }
+                Catch {}
+            }
             Write-Verbose -Message "Exit code from process launched by scheduled task [$executeProcessAsUserExitCode]"
         }
         Else {
