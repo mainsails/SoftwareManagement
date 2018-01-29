@@ -217,6 +217,9 @@ Function Start-EXEAsUser {
             [int32]$executeProcessAsUserExitCode = ($exeSchTasksResult = & $exeSchTasks /query /TN $schTaskName /V /FO CSV) | ConvertFrom-CSV | Select-Object -ExpandProperty 'Last Result' | Select-Object -First 1
             Write-Verbose -Message "Exit code from process launched by scheduled task [$executeProcessAsUserExitCode]"
         }
+        Else {
+            Start-Sleep -Seconds 1
+        }
 
         ## Delete scheduled task
         Try {
