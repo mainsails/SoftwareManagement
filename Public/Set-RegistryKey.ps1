@@ -64,14 +64,21 @@ Function Set-RegistryKey {
                 [string]$Key = Convert-RegistryPath -Key $Key
             }
 
-            # Replace forward slash character to allow forward slash in name of the registry key
-            $Key = $Key.Replace('/',"$([char]0x2215)")
-
             # Create registry key if it doesn't exist
             If (-not (Test-Path -LiteralPath $Key -ErrorAction 'Stop')) {
                 Try {
                     Write-Verbose -Message "Create registry key [$Key]"
-                    $null = New-Item -Path $Key -ItemType 'Registry' -Force -ErrorAction 'Stop'
+                    # No forward slash found in Key, using the New-Item cmdlet to create registry key
+                    If ((($Key -split '/').Count - 1) -eq 0) {
+                        $null = New-Item -Path $Key -ItemType 'Registry' -Force -ErrorAction 'Stop'
+                    }
+                    # Forward slash found in Key, using reg.exe ADD to create registry key
+                    Else {
+                        [string]$CreateRegkeyResult = & reg.exe Add "$($Key.Substring($Key.IndexOf('::') + 2))"
+                        If ($global:LastExitCode -ne 0) {
+                            Throw "Failed to create registry key [$Key]"
+                        }
+                    }
                 }
                 Catch {
                     Throw
