@@ -140,6 +140,10 @@ Function New-Shortcut {
                     $null = Rename-Item -LiteralPath $TempFile -NewName $Path.Name -Force -ErrorAction 'Stop'
                 }
             }
+            Else {
+                Write-Warning -Message "Invalid File Extension [$($Path.FullName)]"
+                Throw
+            }
         }
         Catch {
             Write-Warning -Message "Failed to create shortcut [$($Path.FullName)]"
