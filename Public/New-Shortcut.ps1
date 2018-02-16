@@ -22,10 +22,12 @@ Function New-Shortcut {
         Window style of the application. Options: Normal, Maximized, Minimized. Default is: Normal
     .PARAMETER RunAsAdmin
         Set shortcut to run program as administrator. This option will prompt user to elevate when executing shortcut
+    .PARAMETER Hotkey
+        Set a Hotkey to launch the shortcut. e.g "CTRL+SHIFT+R"
     .PARAMETER ContinueOnError
         Continue if an exit code is returned by msiexec that is not recognized. Default is: $true
     .EXAMPLE
-        New-Shortcut -Path 'C:\Path\To\File\TestProgram.lnk' -TargetPath "$env:windir\System32\notepad.exe" -IconLocation "$env:windir\system32\notepad.exe" -Description 'Notepad Shortcut'
+        New-Shortcut -Path 'C:\Path\To\File\TestProgram.lnk' -TargetPath "$env:windir\System32\notepad.exe" -IconLocation "$env:windir\system32\notepad.exe" -Description 'Notepad Shortcut' -Hotkey 'CTRL+SHIFT+R'
     .EXAMPLE
         New-Shortcut -Path 'C:\Path\To\File\TestURL.url' -TargetPath "www.google.co.uk"
     #>
@@ -58,6 +60,9 @@ Function New-Shortcut {
         [string]$WindowStyle,
         [Parameter(Mandatory=$false)]
         [switch]$RunAsAdmin,
+        [Parameter(Mandatory=$false)]
+        [ValidateNotNullorEmpty()]
+        [string]$Hotkey,
         [Parameter(Mandatory=$false)]
         [ValidateNotNullorEmpty()]
         [boolean]$ContinueOnError = $true
@@ -107,13 +112,14 @@ Function New-Shortcut {
                     'Minimized' { $WindowStyleInt = 7 }
                     Default     { $windowStyleInt = 1 }
                 }
-                $Shortcut = $Shell.CreateShortcut($Path.FullName)
+                $Shortcut                  = $Shell.CreateShortcut($Path.FullName)
                 $Shortcut.TargetPath       = $TargetPath
                 $Shortcut.Arguments        = $Arguments
                 $Shortcut.Description      = $Description
                 $Shortcut.WorkingDirectory = $WorkingDirectory
                 $Shortcut.WindowStyle      = $WindowStyleInt
                 If ($IconLocation) { $Shortcut.IconLocation = $IconLocation }
+                If ($Hotkey)       { $Shortcut.Hotkey       = $Hotkey }
                 $Shortcut.Save()
 
                 # Set shortcut to run as administrator
