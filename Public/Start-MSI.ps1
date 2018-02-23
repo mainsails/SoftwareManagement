@@ -12,7 +12,9 @@ Function Start-MSI {
     .PARAMETER Path
         The path to the MSI/MSP file or the product code of the installed MSI
     .PARAMETER Transform
-        The name of the transform file(s) to be applied to the MSI. The transform file is expected to be in the same directory as the MSI file
+        The name of the transform (mst) file(s) to be applied to the MSI. The transform file is expected to be in the same directory as the MSI file
+    .PARAMETER Patch
+        The name of the patch (msp) file(s) to be applied to the MSI. The patch file is expected to be in the same directory as the MSI file
     .PARAMETER CustomParameters
         Adds to the default parameters. Install default is: "REBOOT=ReallySuppress /QN". Uninstall default is: "REBOOT=ReallySuppress /QN"
     .PARAMETER PassThru
@@ -49,6 +51,9 @@ Function Start-MSI {
         [Parameter(Mandatory=$false)]
         [ValidateNotNullorEmpty()]
         [string]$Transform,
+        [Parameter(Mandatory=$false)]
+        [ValidateNotNullorEmpty()]
+        [string]$Patch,
         [Parameter(Mandatory=$false)]
         [ValidateNotNullorEmpty()]
         [string]$CustomParameters,
@@ -93,12 +98,8 @@ Function Start-MSI {
         Write-Verbose -Message "Calling : $($MyInvocation.MyCommand.Name) [$Action]"
         Write-Verbose -Message "MSI : $Path"
 
-        If ($Transform) {
-            Write-Verbose -Message "Transform : $Transform"
-        }
-        Else {
-            Write-Verbose -Message "Transform : No Transform(s) Specified"
-        }
+        If ($Transform) { Write-Verbose -Message "Transform : $Transform" }
+        If ($Patch)     { Write-Verbose -Message "Patch : $Patch" }
 
         # Build Log File Name
         If ($Path -match $MSIProductCodeRegExPattern) {
