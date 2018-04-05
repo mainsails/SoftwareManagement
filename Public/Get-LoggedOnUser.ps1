@@ -4,6 +4,8 @@ Function Get-LoggedOnUser {
         Get session details for all local and RDP logged on users
     .DESCRIPTION
         Get session details for all local and RDP logged on users using Win32 APIs
+    .PARAMETER ComputerName
+        Specifies the computer to query for session details. The default is the local computer
     .EXAMPLE
         Get-LoggedOnUser
     .EXAMPLE
@@ -34,7 +36,7 @@ Function Get-LoggedOnUser {
     [CmdletBinding()]
     Param (
         [Parameter(Mandatory=$false)]
-        [string[]]$ComputerName = $env:ComputerName
+        [string]$ComputerName = $env:ComputerName
     )
 
     Begin {
