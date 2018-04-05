@@ -16,7 +16,7 @@ Author = 'Sam Shaw'
 Copyright = '(c) 2017 Sam Shaw. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'Module to assist with common application deployment tasks'
+Description = 'Module to assist with common application deployment and machine configuration tasks'
 
 # Minimum version of the Windows PowerShell engine required by this module
 PowerShellVersion = '4.0'
@@ -28,6 +28,7 @@ FunctionsToExport = @('Block-AppExecution',
                       'Get-FileVersion',
                       'Get-FreeDiskSpace',
                       'Get-InstalledApplication',
+                      'Get-LocalUsers',
                       'Get-LoggedOnUser',
                       'Get-MSIErrorCodeMessage',
                       'Get-MsiTableProperty',
