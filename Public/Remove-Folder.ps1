@@ -33,6 +33,7 @@ Function Remove-Folder {
     Process {
         If (Test-Path -LiteralPath $Path -PathType 'Container') {
             Try {
+                Write-Verbose -Message "Deleting folder [$path] recursively"
                 Remove-Item -LiteralPath $Path -Force -Recurse -ErrorAction 'Stop'
             }
             Catch {

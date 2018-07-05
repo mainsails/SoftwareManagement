@@ -51,6 +51,7 @@ FunctionsToExport = @('Block-AppExecution',
                       'Start-EXEAsUser',
                       'Start-MSI',
                       'Start-MSP',
+                      'Test-EthernetConnection',
                       'Unblock-AppExecution',
                       'Update-Desktop',
                       'Update-GroupPolicy')
