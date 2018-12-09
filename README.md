@@ -1,7 +1,7 @@
 # Software Management PowerShell Module
 
 ## Description
-The SoftwareManagement module enables a set of functions to perform common application deployment tasks including :
+The SoftwareManagement module enables a set of functions to perform common application deployment tasks, including :
 * Extensive verbose logging of both the functions and any MSI installation / uninstallation
 * The ability to execute any type of setup (MSI or EXEs) and handle / translate the return codes
 * Mass remove MSI applications with a partial match (e.g. remove all versions of all MSI applications which match "Java").
@@ -39,6 +39,7 @@ Get-MSIErrorCodeMessage -MSIErrorCode 3010
 Get-FileVersion -File "C:\Path\To\File\7z1604-x64.exe"
 New-Shortcut -Path "C:\Path\To\File\TestProgram.lnk" -TargetPath "$env:windir\System32\notepad.exe" -IconLocation "$env:windir\system32\notepad.exe" -Description 'Notepad Shortcut'
 Get-LoggedOnUser
+Remove-LoggedOnUser
 Get-UserProfiles
 Update-Desktop
 Update-GroupPolicy

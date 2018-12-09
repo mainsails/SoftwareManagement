@@ -4,7 +4,7 @@
 RootModule = 'SoftwareManagement.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.1.1'
+ModuleVersion = '0.1.2'
 
 # ID used to uniquely identify this module
 GUID = 'f6ef9d27-d00c-452f-8853-5da0f85f330b'
@@ -42,6 +42,7 @@ FunctionsToExport = @('Block-AppExecution',
                       'New-Shortcut',
                       'Remove-File',
                       'Remove-Folder',
+                      'Remove-LoggedOnUser',
                       'Remove-MSI',
                       'Remove-RegistryKey',
                       'Set-ActiveSetup',
