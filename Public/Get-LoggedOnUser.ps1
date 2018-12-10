@@ -16,7 +16,7 @@ Function Get-LoggedOnUser {
         -----         -----------
         Active        A user is logged on to the session.
         ConnectQuery  The session is in the process of connecting to a client
-        Connected	    A client is connected to the session
+        Connected     A client is connected to the session
         Disconnected  The session is active, but the client has disconnected from it
         Down          The session is down due to an error
         Idle          The session is waiting for a client to connect
