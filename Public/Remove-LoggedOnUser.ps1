@@ -10,8 +10,6 @@ Function Remove-LoggedOnUser {
         Specifies the username
     .EXAMPLE
         Remove-LoggedOnUser
-    .NOTES
-        CURRENTLY REMOVING ALL USERS : REWORK REQUIRED
     #>
 
     [CmdletBinding()]
@@ -33,8 +31,18 @@ Function Remove-LoggedOnUser {
             Write-Verbose -Message "Get session information for all logged on users on [$ComputerName]"
             $SessionInfo = Write-Output -InputObject ([PSSM.QueryUser]::GetUserSessionInfo("$ComputerName"))
             Foreach ($Session in $SessionInfo) {
-                Write-Verbose -Message "Logging off User : [$($Session.UserName)] from Computer : [$($Session.ComputerName)] by SessionID : [$($Session.SessionId)]"
-                Start-EXE -Path "$env:SystemRoot\System32\LOGOFF.exe" -Parameters "$($Session.SessionId) /SERVER:$($Session.ComputerName)"
+                If (($UserName) -and ($Session.UserName -eq $UserName)) {
+                    Write-Verbose -Message "Logging off User : [$($Session.UserName)] from Computer : [$($Session.ComputerName)] by SessionID : [$($Session.SessionId)]"
+                    Start-EXE -Path "$env:SystemRoot\System32\LOGOFF.exe" -Parameters "$($Session.SessionId) /SERVER:$($Session.ComputerName)"
+                }
+                ElseIf (-not ($UserName)) {
+                    Write-Verbose -Message "Logging off all users from Computer : [$($Session.ComputerName)]"
+                    Write-Verbose -Message "Logging off User : [$($Session.UserName)] from Computer : [$($Session.ComputerName)] by SessionID : [$($Session.SessionId)]"
+                    Start-EXE -Path "$env:SystemRoot\System32\LOGOFF.exe" -Parameters "$($Session.SessionId) /SERVER:$($Session.ComputerName)"
+                }
+                Else {
+                    Write-Warning -Message "User : [$UserName] is not logged on Computer : [$($Session.ComputerName)]"
+                }
             }
         }
         Catch {
