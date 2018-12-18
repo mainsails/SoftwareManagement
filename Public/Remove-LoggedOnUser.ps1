@@ -1,23 +1,33 @@
 Function Remove-LoggedOnUser {
     <#
     .SYNOPSIS
-        Remove LoggedOnUser
+        Removes logged on user(s).
     .DESCRIPTION
-        Remove LoggedOnUser
+        Queries a computer for all logged in users and logs them out as required.
     .PARAMETER ComputerName
-        Specifies the computer
+        Specifies the computer to query for session details. The default is the local computer.
     .PARAMETER UserName
-        Specifies the username
+        Specifies a user name or names to log off.
+    .PARAMETER All
+        Specifies that all users will be logged off.
     .EXAMPLE
-        Remove-LoggedOnUser
+        Remove-LoggedOnUser -UserName 'UserA','UserB'
+        Logs off the two specified users from the local computer.
+    .EXAMPLE
+        Remove-LoggedOnUser -ComputerName 'Computer1' -All
+        Logs off all users from the specified computer.
+    .LINK
+        Get-LoggedOnUser
     #>
 
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName='UserName')]
     Param (
         [Parameter(Mandatory=$false)]
         [string]$ComputerName = $env:ComputerName,
-        [Parameter(Mandatory=$false)]
-        [string]$UserName
+        [Parameter(ParameterSetName='UserName',Mandatory=$true)]
+        [string[]]$UserName,
+        [Parameter(ParameterSetName='All',Mandatory=$false)]
+        [switch]$All
     )
 
     Begin {
@@ -31,18 +41,16 @@ Function Remove-LoggedOnUser {
             Write-Verbose -Message "Get session information for all logged on users on [$ComputerName]"
             $SessionInfo = Write-Output -InputObject ([PSSM.QueryUser]::GetUserSessionInfo("$ComputerName"))
             Foreach ($Session in $SessionInfo) {
-                If (($UserName) -and ($Session.UserName -eq $UserName)) {
-                    Write-Verbose -Message "Logging off User : [$($Session.UserName)] from Computer : [$($Session.ComputerName)] by SessionID : [$($Session.SessionId)]"
-                    Start-EXE -Path "$env:SystemRoot\System32\LOGOFF.exe" -Parameters "$($Session.SessionId) /SERVER:$($Session.ComputerName)"
+                If ($PSCmdlet.ParameterSetName -eq 'UserName') {
+                    Foreach ($Session in $SessionInfo) {
+                        If ($UserName -notcontains $Session.UserName) {
+                            return
+                        }
+                    }
                 }
-                ElseIf (-not ($UserName)) {
-                    Write-Verbose -Message "Logging off all users from Computer : [$($Session.ComputerName)]"
-                    Write-Verbose -Message "Logging off User : [$($Session.UserName)] from Computer : [$($Session.ComputerName)] by SessionID : [$($Session.SessionId)]"
-                    Start-EXE -Path "$env:SystemRoot\System32\LOGOFF.exe" -Parameters "$($Session.SessionId) /SERVER:$($Session.ComputerName)"
-                }
-                Else {
-                    Write-Warning -Message "User : [$UserName] is not logged on Computer : [$($Session.ComputerName)]"
-                }
+                Write-Verbose -Message "Logging off User : [$($Session.UserName)] from Computer : [$($Session.ComputerName)] by SessionID : [$($Session.SessionId)]"
+                Start-EXE -Path "$env:SystemRoot\System32\LOGOFF.exe" -Parameters "$($Session.SessionId) /SERVER:$($Session.ComputerName)"
+
             }
         }
         Catch {

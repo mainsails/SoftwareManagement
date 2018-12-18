@@ -31,6 +31,8 @@ Function Get-LoggedOnUser {
 
         Description of IsRdpSession property :
         Boolean value indicating whether the user is associated with an RDP client session
+    .LINK
+        Remove-LoggedOnUser
     #>
 
     [CmdletBinding()]
