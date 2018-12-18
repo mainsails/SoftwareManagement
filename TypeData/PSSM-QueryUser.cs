@@ -52,6 +52,7 @@ namespace PSSM
 
         public class TerminalSessionInfo
         {
+            public string ComputerName;
             public string NTAccount;
             public string SID;
             public string UserName;
@@ -270,7 +271,8 @@ namespace PSSM
             try
             {
                 server = OpenServer(ServerName);
-
+                data.ComputerName = ServerName;
+                
                 if (WTSQuerySessionInformation(server, SessionId, WTS_INFO_CLASS.ClientBuildNumber, out buffer, out bytesReturned) == false)
                 {
                     return data;
