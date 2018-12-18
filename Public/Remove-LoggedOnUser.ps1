@@ -38,14 +38,11 @@ Function Remove-LoggedOnUser {
     }
     Process {
         Try {
-            Write-Verbose -Message "Get session information for all logged on users on [$ComputerName]"
-            $SessionInfo = Write-Output -InputObject ([PSSM.QueryUser]::GetUserSessionInfo("$ComputerName"))
+            $SessionInfo = Get-LoggedOnUser -ComputerName $ComputerName
             Foreach ($Session in $SessionInfo) {
                 If ($PSCmdlet.ParameterSetName -eq 'UserName') {
-                    Foreach ($Session in $SessionInfo) {
-                        If ($UserName -notcontains $Session.UserName) {
-                            return
-                        }
+                    If ($UserName -notcontains $Session.UserName) {
+                        continue
                     }
                 }
                 Write-Verbose -Message "Logging off User : [$($Session.UserName)] from Computer : [$($Session.ComputerName)] by SessionID : [$($Session.SessionId)]"
