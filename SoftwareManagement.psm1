@@ -1,6 +1,7 @@
 # Import required C#
-Add-Type -Path "$PSScriptRoot\TypeData\PSSM-Msi.cs"
 Add-Type -Path "$PSScriptRoot\TypeData\PSSM-Explorer.cs"
+Add-Type -Path "$PSScriptRoot\TypeData\PSSM-FileLock.cs"
+Add-Type -Path "$PSScriptRoot\TypeData\PSSM-Msi.cs"
 $ReferencedAssemblies = ('System.DirectoryServices, Version=2.0.0.0, Culture=neutral, PublicKeyToken=B03F5F7F11D50A3A')
 Add-Type -Path "$PSScriptRoot\TypeData\PSSM-QueryUser.cs" -ReferencedAssemblies $ReferencedAssemblies
 

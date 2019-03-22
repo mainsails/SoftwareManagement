@@ -6,6 +6,7 @@ The SoftwareManagement module enables a set of functions to perform common appli
 * The ability to execute any type of setup (MSI or EXEs) and handle / translate the return codes
 * Mass remove MSI applications with a partial match (e.g. remove all versions of all MSI applications which match "Java").
 * Check for in-progress MSI installations and wait for the MSI Mutex to become available
+* Check which process is locking a file
 * Update Group Policy
 * Copy / Delete Files
 * Get / Set / Remove Registry Keys and Values
@@ -41,6 +42,7 @@ New-Shortcut -Path "C:\Path\To\File\TestProgram.lnk" -TargetPath "$env:windir\Sy
 Get-LoggedOnUser
 Remove-LoggedOnUser
 Get-UserProfiles
+Get-FileLockProcess -Path "$HOME\Documents\Spreadsheet.csv"
 Update-Desktop
 Update-GroupPolicy
 Get-PowerSupply

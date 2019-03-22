@@ -4,7 +4,7 @@
 RootModule = 'SoftwareManagement.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.1.2'
+ModuleVersion = '0.1.3'
 
 # ID used to uniquely identify this module
 GUID = 'f6ef9d27-d00c-452f-8853-5da0f85f330b'
@@ -13,7 +13,7 @@ GUID = 'f6ef9d27-d00c-452f-8853-5da0f85f330b'
 Author = 'Sam Shaw'
 
 # Copyright statement for this module
-Copyright = '(c) 2017 Sam Shaw. All rights reserved.'
+Copyright = '(c) 2019 Sam Shaw. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = 'Module to assist with common application deployment and machine configuration tasks'
@@ -25,6 +25,7 @@ PowerShellVersion = '4.0'
 FunctionsToExport = @('Block-AppExecution',
                       'ConvertTo-NTAccountOrSID',
                       'Copy-File',
+                      'Get-FileLockProcess',
                       'Get-FileVersion',
                       'Get-FreeDiskSpace',
                       'Get-InstalledApplication',
