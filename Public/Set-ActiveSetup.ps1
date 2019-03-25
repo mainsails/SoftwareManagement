@@ -136,7 +136,7 @@ Function Set-ActiveSetup {
                 }
                 '.ps1' {
                     [string]$CUStubEXEPath = "$PSHOME\powershell.exe"
-                    [string]$CUArguments   = "-ExecutionPolicy Bypass -NoProfile -NoLogo -WindowStyle Hidden -Command & { & `\`"$StubEXEPath`\`"}"
+                    [string]$CUArguments   = "-ExecutionPolicy Bypass -NoProfile -NoLogo -WindowStyle Hidden -Command `"& { & `\`"$StubExePath`\`"}`""
                     [string]$StubPath      = "$CUStubEXEPath $CUArguments"
                 }
             }
