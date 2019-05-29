@@ -6,7 +6,7 @@ Function Start-MSI {
         Executes msiexec.exe to perform the following actions for MSI & MSP files and MSI product codes: install, uninstall, patch, repair
         If the -Action parameter is set to "Install" and the MSI is already installed, the function will exit
         Uses default switches for msiexec, preferring a silent install with no console output
-        Automatically generates an msi log file in $env:WinDir\Logs\Software
+        Automatically generates an msi log file in $env:ProgramData\Logs\Software
     .PARAMETER Action
         The action to perform. Options: Install, Uninstall, Patch, Repair
     .PARAMETER Path
@@ -78,7 +78,7 @@ Function Start-MSI {
         $msiInstallDefaultParams   = 'REBOOT=ReallySuppress /QN'
         $msiUninstallDefaultParams = 'REBOOT=ReallySuppress /QN'
         $msiFile                   = [IO.Path]::GetFileNameWithoutExtension($Path)
-        $msiLogPath                = "$env:WinDir\Logs\Software"
+        $msiLogPath                = "$env:ProgramData\Logs\Software"
         $msiLoggingOptions         = '/L*v'
         $exeMsiexec                = 'msiexec.exe'
 
