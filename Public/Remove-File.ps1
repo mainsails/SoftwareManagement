@@ -44,7 +44,7 @@ Function Remove-File {
     }
     Process {
         # Build hashtable of parameters/value pairs to be passed to Remove-Item cmdlet
-        [hashtable]$RemoveFileSplat =  @{ 'Recurse' = $Recurse
+        [hashtable]$RemoveFileSplat = @{ 'Recurse' = $Recurse
                                           'Force' = $true
                                           'ErrorVariable' = '+ErrorRemoveItem'
                                         }
