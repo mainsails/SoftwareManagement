@@ -19,8 +19,7 @@ The SoftwareManagement module enables a set of functions to perform common appli
 
 
 ## Requirements
-* All Windows Client Operating Systems are supported  
-   Windows 7 SP1 and Windows Server 2008R2 through to Windows 10 CB and Windows Server 2016
+* All Windows Client Operating Systems are supported Windows 7 SP1 and Windows Server 2008R2 through to Current Branches of Windows 10 and Windows Server
 * PowerShell Version 4
 * Administrative Rights (where applicable)
 
