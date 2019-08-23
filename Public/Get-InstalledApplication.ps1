@@ -87,9 +87,10 @@ Function Get-InstalledApplication {
             }
 
             # Remove problematic characters
-            [string]$AppDisplayName    = $RegKeyApp.DisplayName    -replace '[^\p{L}\p{Nd} .]',''
-            [string]$AppDisplayVersion = $RegKeyApp.DisplayVersion -replace '[^\p{L}\p{Nd} .]',''
-            [string]$AppPublisher      = $RegKeyApp.Publisher      -replace '[^\p{L}\p{Nd} .]',''
+            $InvalidFileNameChars      = [string][System.IO.Path]::GetInvalidFileNameChars()
+            [string]$AppDisplayName    = $RegKeyApp.DisplayName    -replace $InvalidFileNameChars,''
+            [string]$AppDisplayVersion = $RegKeyApp.DisplayVersion -replace $InvalidFileNameChars,''
+            [string]$AppPublisher      = $RegKeyApp.Publisher      -replace $InvalidFileNameChars,''
 
             ## Determine if application is a 64-bit application
             [boolean]$Is64BitApp = If (([Environment]::Is64BitOperatingSystem -eq $true) -and ($RegKeyApp.PSPath -notmatch '^Microsoft\.PowerShell\.Core\\Registry::HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node')) { $true } Else { $false }
