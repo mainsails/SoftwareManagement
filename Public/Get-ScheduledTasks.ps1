@@ -53,7 +53,7 @@ Function Get-ScheduledTasks {
                 ForEach ($SchtasksResult in $SchtasksResults) {
                     If ($SchtasksResult.TaskName -match $TaskName) {
                         $SchtasksResult | Get-Member -MemberType 'Properties' |
-                        ForEach -Begin {
+                        ForEach-Object -Begin {
                             [hashtable]$Task = @{}
                         } -Process {
                             # Remove spaces and colons in property names. Do not set property value if line being processed is a column header
