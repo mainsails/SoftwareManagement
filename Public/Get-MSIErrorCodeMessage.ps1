@@ -16,9 +16,9 @@ Function Get-MSIErrorCodeMessage {
 
     [CmdletBinding()]
     Param (
-    [Parameter(Mandatory=$true)]
-    [ValidateNotNullorEmpty()]
-    [int32]$MSIErrorCode
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNullorEmpty()]
+        [int32]$MSIErrorCode
     )
 
     Begin {
