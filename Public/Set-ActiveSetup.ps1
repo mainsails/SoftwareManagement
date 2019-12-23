@@ -97,7 +97,7 @@ Function Set-ActiveSetup {
 
                 Write-Verbose -Message "Remove Active Setup entry [$HKCUActiveSetupKey] for all log on user registry hives on the system"
                 [scriptblock]$RemoveHKCUActiveSetupKey = {
-                    If (Test-Path -Path $HKCUActiveSetupKey) {
+                    If (Get-RegistryKey -Key $HKCUActiveSetupKey -SID $UserProfile.SID) {
                         Remove-RegistryKey -Key $HKCUActiveSetupKey -SID $UserProfile.SID -Recurse
                     }
                 }
